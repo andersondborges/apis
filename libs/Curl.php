@@ -88,27 +88,16 @@ class Curl{
                 curl_close($curl);
                 break;
             case "POST-JSON":
-                if(is_array($vars)){
-                    curl_setopt_array($curl, array(
-                        CURLOPT_RETURNTRANSFER => 1,
-                        CURLOPT_POST => 1,
-                        CURLOPT_POSTFIELDS => json_encode($vars),
-                        CURLOPT_URL => $this->url,
-                        CURLOPT_USERAGENT => "Clickwise Browser Agent"
-                    ));
-                    $resp = curl_exec($curl);
-                    $this->response = $resp;
-                }else{
-                    // throw new Exception("POST var should be arrray");
-                    curl_setopt_array($curl, array(
-                        CURLOPT_RETURNTRANSFER => 1,
-                        CURLOPT_POST => $vars,
-                        CURLOPT_URL => $this->url,
-                        CURLOPT_USERAGENT => "Clickwise Browser Agent"
-                    ));
-                    $resp = curl_exec($curl);
-                    $this->response = $resp;
-                }
+                curl_setopt_array($curl, array(
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_POST => 1,
+                    CURLOPT_POSTFIELDS => json_encode($vars),
+                    CURLOPT_URL => $this->url,
+                    CURLOPT_USERAGENT => "Clickwise Browser Agent"
+                ));
+
+                $resp = curl_exec($curl);
+                $this->response = $resp;
                 curl_close($curl);
                 break;
         }
