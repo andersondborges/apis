@@ -6,6 +6,7 @@ class Curl{
     public $response = null;
     public $status_code = 0;
     public $error = "";
+    public $headers = array();
     public $obj;
 
     public function __construct($url=null, $customHeaders = array()){
@@ -20,9 +21,7 @@ class Curl{
     public function request($type = "GET",$vars=null){
         $curl = curl_init();
         $resp;
-        if($this->headers){
-            curl_setopt($curl,CURLOPT_HTTPHEADER,$this->headers);
-        }
+        curl_setopt($curl,CURLOPT_HTTPHEADER,$this->headers);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         switch($type){
             case "GET":
@@ -59,7 +58,8 @@ class Curl{
                     $resp = curl_exec($curl);
                     $this->response = $resp;
                 }
-
+                $this->status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+                $this->error = curl_error($curl);
                 curl_close($curl);
                 break;
             case "POST-PAYLOAD":
@@ -85,6 +85,8 @@ class Curl{
                     $this->response = $resp;
                 }
 
+                $this->status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+                $this->error = curl_error($curl);
                 curl_close($curl);
                 break;
             case "POST-JSON":
@@ -98,6 +100,8 @@ class Curl{
 
                 $resp = curl_exec($curl);
                 $this->response = $resp;
+                $this->status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+                $this->error = curl_error($curl);
                 curl_close($curl);
                 break;
         }
