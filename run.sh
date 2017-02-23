@@ -1,4 +1,5 @@
 #!/bin/bash
 
 # run rakuten export script
-php rakuten/export.php
+php rakuten/japan.php
+php rakuten/international.php
