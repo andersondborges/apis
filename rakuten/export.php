@@ -9,14 +9,20 @@ function export($start_date,$campaigns,$bear){
       $orderid = $c->obj[$i]->order_id;
       $totalCost = $c->obj[$i]->sale_amount;
       $commission = $c->obj[$i]->commissions;
-      $refid = $c->obj[$i]->u1;
       $currency = $c->obj[$i]->currency;
+
+      $affdata = explode("_",$c->obj[$i]->u1);
 
       // parse date
       $darr = date_parse($c->obj[$i]->transaction_date);
       $date  = $darr["year"] . "-" . $darr["month"] . "-" . $darr["day"];
 
-      $url = "http://track.clickwise.net/pb?TotalCost=$totalCost&OrderId=$orderid&Commission=$commission&CampaignID=$actualCamp&RefId=$refid&Date=$date&Currency=$currency";
+      if (count($affdata) == 2) {
+        $url = "http://track.clickwise.net/pb?TotalCost=$totalCost&OrderId=$orderid&Commission=$commission&CampaignID=$actualCamp&RefId=$affdata[0]&Date=$date&Currency=$currency&ExtraData=$affdata[1]";
+      }else{
+        $url = "http://track.clickwise.net/pb?TotalCost=$totalCost&OrderId=$orderid&Commission=$commission&CampaignID=$actualCamp&RefId=$affdata[0]&Date=$date&Currency=$currency";
+      }
+
       echo $url ."\n";
       $s2s = new Curl($url);
       $s2s->request("GET");
